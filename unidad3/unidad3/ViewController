@@ -1,0 +1,75 @@
+//
+//  ViewController.swift
+//  unidad3
+//
+//  Created by Mac18 on 19/04/21.
+//
+
+import UIKit
+
+class ViewController: UIViewController, UITextFieldDelegate, ClimaManagerDelegado {
+
+    
+
+    var climaManager = ClimaManager()
+    @IBOutlet weak var ciudad: UITextField!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        climaManager.delegado = self
+        ciudad.delegate = self
+        // Do any additional setup after loading the view.
+    }
+    
+    @IBOutlet weak var imagen: UIImageView!
+    @IBOutlet weak var templabel: UILabel!
+    @IBOutlet weak var ciudadLabel: UILabel!
+    @IBOutlet weak var buscar: UIButton!
+    @IBAction func buscarbutton(_ sender: UIButton) {
+        ciudad.endEditing(true)
+        print(ciudad.text!)
+        
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        ciudad.endEditing(true)
+        print(ciudad.text!)
+        return true
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if ciudad.text != ""{
+        
+          
+            return true
+        }else{
+            ciudad.placeholder = "Escribe la ciudad"
+            return false
+        }
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        climaManager.buscarClima(ciudad: ciudad.text!)
+        ciudadLabel.text = ciudad.text
+        ciudad.text = ""
+        templabel.text = "19"
+        imagen.image = UIImage(named: "lupa")
+    }
+    
+    
+    @IBAction func gpsbutton(_ sender: UIButton) {
+    }
+    
+    /*func actualizarClima(objClima: objClima) {
+        print(clima.tempString)
+    }*/
+    func actualizarClima(clima: Modelo) {
+        DispatchQueue.main.async {
+           self.templabel.text = clima.tempString
+        
+        }
+        //
+        
+    }
+}
+
